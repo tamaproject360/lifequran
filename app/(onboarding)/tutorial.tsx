@@ -33,7 +33,7 @@ const slides: TutorialSlide[] = [
   {
     id: 1,
     icon: '📖',
-    title: 'Baca Al-Qur'an Lengkap',
+    title: 'Baca Al-Qur\'an Lengkap',
     description:
       '30 Juz, 114 Surah dengan terjemahan Indonesia. Akses semua kapan saja, di mana saja.',
     color: '#22C55E',
