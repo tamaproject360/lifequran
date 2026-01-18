@@ -258,7 +258,8 @@ export default function ProgressScreen() {
                 from={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ type: 'timing', duration: 400, delay: 200 }}
-                className="flex-1 min-w-[45%]"
+                className="flex-1"
+                style={{ minWidth: '45%' }}
               >
                 <View className="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow-sm">
                   <View className="w-10 h-10 rounded-full bg-primary-emerald/10 items-center justify-center mb-3">
@@ -277,7 +278,8 @@ export default function ProgressScreen() {
                 from={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ type: 'timing', duration: 400, delay: 250 }}
-                className="flex-1 min-w-[45%]"
+                className="flex-1"
+                style={{ minWidth: '45%' }}
               >
                 <View className="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow-sm">
                   <View className="w-10 h-10 rounded-full bg-celestial-mint/20 items-center justify-center mb-3">
@@ -296,7 +298,8 @@ export default function ProgressScreen() {
                 from={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ type: 'timing', duration: 400, delay: 300 }}
-                className="flex-1 min-w-[45%]"
+                className="flex-1"
+                style={{ minWidth: '45%' }}
               >
                 <View className="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow-sm">
                   <View className="w-10 h-10 rounded-full bg-muted-gold/20 items-center justify-center mb-3">
@@ -315,7 +318,8 @@ export default function ProgressScreen() {
                 from={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ type: 'timing', duration: 400, delay: 350 }}
-                className="flex-1 min-w-[45%]"
+                className="flex-1"
+                style={{ minWidth: '45%' }}
               >
                 <View className="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow-sm">
                   <View className="w-10 h-10 rounded-full bg-primary-emerald/10 items-center justify-center mb-3">

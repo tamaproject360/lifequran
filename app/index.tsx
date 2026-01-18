@@ -4,7 +4,7 @@
  * Dipersembahkan untuk Umat Muslim di Seluruh Dunia 🤲
  */
 
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { useRouter } from 'expo-router';
 import { useTheme } from '../src/theme/ThemeContext';
@@ -14,16 +14,17 @@ import Animated, {
   useSharedValue,
   withTiming,
   withDelay,
-  withSequence,
   Easing,
 } from 'react-native-reanimated';
 import { useEffect, useState } from 'react';
-import { QuranDataImporter } from '../src/database/quranData';
+import { useAppStore } from '../src/store/appStore';
+import { Colors } from '../src/theme/colors';
 
 export default function Index() {
   const { theme, isDark } = useTheme();
   const router = useRouter();
   const [isChecking, setIsChecking] = useState(true);
+  const hasCompletedOnboarding = useAppStore((state) => state.hasCompletedOnboarding);
   
   // Animation values
   const titleOpacity = useSharedValue(0);
@@ -34,47 +35,45 @@ export default function Index() {
   const buttonTranslateY = useSharedValue(20);
 
   useEffect(() => {
-    checkQuranData();
-  }, []);
+    // Start animations immediately
+    startAnimations();
+    
+    // Check onboarding status after short delay for splash effect
+    const timer = setTimeout(() => {
+      if (hasCompletedOnboarding) {
+        // User has completed onboarding, go to home
+        router.replace('/(tabs)/home');
+      } else {
+        // User hasn't completed onboarding, show welcome screen
+        setIsChecking(false);
+      }
+    }, 1500);
 
-  const checkQuranData = async () => {
-    try {
-      // Skip data check, always go to home
-      // Data will be loaded on-demand when needed
-      setTimeout(() => {
-        router.replace('/(tabs)/home');
-      }, 1500);
-    } catch (error) {
-      console.error('Error checking data:', error);
-      // Still go to home even if error
-      setTimeout(() => {
-        router.replace('/(tabs)/home');
-      }, 1500);
-    }
-  };
+    return () => clearTimeout(timer);
+  }, [hasCompletedOnboarding]);
 
   const startAnimations = () => {
     // Stagger animation sequence
     titleOpacity.value = withTiming(1, {
-      duration: theme.duration.slow,
+      duration: 800,
       easing: Easing.out(Easing.exp),
     });
     titleTranslateY.value = withTiming(0, {
-      duration: theme.duration.slow,
+      duration: 800,
       easing: Easing.out(Easing.exp),
     });
 
     taglineOpacity.value = withDelay(
       150,
       withTiming(1, {
-        duration: theme.duration.slow,
+        duration: 800,
         easing: Easing.out(Easing.exp),
       })
     );
     taglineTranslateY.value = withDelay(
       150,
       withTiming(0, {
-        duration: theme.duration.slow,
+        duration: 800,
         easing: Easing.out(Easing.exp),
       })
     );
@@ -82,14 +81,14 @@ export default function Index() {
     buttonOpacity.value = withDelay(
       300,
       withTiming(1, {
-        duration: theme.duration.slow,
+        duration: 800,
         easing: Easing.out(Easing.exp),
       })
     );
     buttonTranslateY.value = withDelay(
       300,
       withTiming(0, {
-        duration: theme.duration.slow,
+        duration: 800,
         easing: Easing.out(Easing.exp),
       })
     );
@@ -111,39 +110,68 @@ export default function Index() {
   }));
 
   const handleGetStarted = () => {
-    // Navigate to data import screen
-    router.push('/dataImport');
+    // Navigate to onboarding
+    router.push('/(onboarding)/welcome');
   };
 
+  // Splash screen
   if (isChecking) {
     return (
       <View
         style={[
           styles.container,
-          { backgroundColor: theme.colors.background, justifyContent: 'center', alignItems: 'center' },
+          { 
+            backgroundColor: isDark ? Colors.dark.background : Colors.light.background, 
+            justifyContent: 'center', 
+            alignItems: 'center' 
+          },
         ]}
       >
-        <Text
+        <StatusBar style={isDark ? 'light' : 'dark'} />
+        <Animated.Text
           style={[
             styles.title,
+            titleStyle,
             {
-              color: theme.primary.emerald,
-              fontFamily: theme.fontFamily.satoshi.black,
-              fontSize: theme.fontSize.display.medium,
+              color: Colors.primary.emerald,
+              fontFamily: 'Satoshi-Black',
+              fontSize: 42,
             },
           ]}
         >
           LifeQuran
-        </Text>
+        </Animated.Text>
+        <Animated.Text
+          style={[
+            styles.tagline,
+            taglineStyle,
+            {
+              color: isDark 
+                ? Colors.primary.celestial 
+                : Colors.light.text.secondary,
+              fontFamily: 'InstrumentSerif-Italic',
+              fontSize: 18,
+              marginTop: 8,
+            },
+          ]}
+        >
+          Elevating Devotion through Divine Design
+        </Animated.Text>
+        <ActivityIndicator 
+          size="small" 
+          color={Colors.primary.emerald} 
+          style={{ marginTop: 32 }}
+        />
       </View>
     );
   }
 
+  // Welcome screen for new users
   return (
     <View
       style={[
         styles.container,
-        { backgroundColor: theme.colors.background },
+        { backgroundColor: isDark ? Colors.dark.background : Colors.light.background },
       ]}
     >
       <StatusBar style={isDark ? 'light' : 'dark'} />
@@ -152,12 +180,12 @@ export default function Index() {
         <Animated.Text
           style={[
             styles.title,
-            {
-              color: theme.primary.emerald,
-              fontFamily: theme.fontFamily.satoshi.black,
-              fontSize: theme.fontSize.display.medium,
-            },
             titleStyle,
+            {
+              color: Colors.primary.emerald,
+              fontFamily: 'Satoshi-Black',
+              fontSize: 42,
+            },
           ]}
         >
           LifeQuran
@@ -166,14 +194,14 @@ export default function Index() {
         <Animated.Text
           style={[
             styles.tagline,
+            taglineStyle,
             {
               color: isDark 
-                ? theme.primary.celestial 
-                : theme.colors.text.secondary,
-              fontFamily: theme.fontFamily.instrumentSerif.italic,
-              fontSize: theme.fontSize.title.large,
+                ? Colors.primary.celestial 
+                : Colors.light.text.secondary,
+              fontFamily: 'InstrumentSerif-Italic',
+              fontSize: 20,
             },
-            taglineStyle,
           ]}
         >
           Elevating Devotion through Divine Design
@@ -191,18 +219,18 @@ export default function Index() {
         </Animated.View>
       </View>
 
-      <Animated.Text
+      <Text
         style={[
           styles.signature,
           {
-            color: theme.colors.text.tertiary,
-            fontFamily: theme.fontFamily.satoshi.regular,
-            fontSize: theme.fontSize.body.small,
+            color: isDark ? Colors.dark.text.tertiary : Colors.light.text.tertiary,
+            fontFamily: 'Satoshi-Regular',
+            fontSize: 14,
           },
         ]}
       >
         Dipersembahkan untuk Umat Muslim di Seluruh Dunia 🤲
-      </Animated.Text>
+      </Text>
     </View>
   );
 }

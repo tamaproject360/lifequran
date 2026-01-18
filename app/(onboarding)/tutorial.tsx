@@ -11,6 +11,7 @@ import { View, Text, StyleSheet, Dimensions } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useTheme } from '../../src/theme/ThemeContext';
 import { Button } from '../../src/components';
+import { useAppStore } from '../../src/store/appStore';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -77,6 +78,7 @@ export default function TutorialScreen() {
   const router = useRouter();
   const [currentIndex, setCurrentIndex] = useState(0);
   const translateX = useSharedValue(0);
+  const setHasCompletedOnboarding = useAppStore((state) => state.setHasCompletedOnboarding);
 
   const handleNext = () => {
     if (currentIndex < slides.length - 1) {
@@ -92,6 +94,8 @@ export default function TutorialScreen() {
   };
 
   const handleFinish = () => {
+    // Mark onboarding as completed
+    setHasCompletedOnboarding(true);
     // Navigate to main app (tabs)
     router.replace('/(tabs)/home');
   };
