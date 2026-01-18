@@ -210,3 +210,6 @@ export const useBookmarkStore = create<BookmarkState>((set, get) => ({
     }
   },
 }));
+
+// Export gamification store
+export { useGamificationStore } from './gamificationStore';

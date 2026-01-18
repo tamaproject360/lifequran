@@ -17,3 +17,10 @@ export {
   PulsingDots,
   LoadingScreen,
 } from './Loading';
+
+export { XPProgressBar } from './XPProgressBar';
+export { StreakCounter } from './StreakCounter';
+export { DailyChallengeCard } from './DailyChallengeCard';
+export { BadgeCard } from './BadgeCard';
+export { LevelUpModal } from './LevelUpModal';
+export { BadgeUnlockModal } from './BadgeUnlockModal';

@@ -10,7 +10,7 @@ import { StatusBar } from 'expo-status-bar';
 import { ThemeProvider, useTheme } from '../src/theme/ThemeContext';
 import { useFonts } from '../src/hooks/useFonts';
 import { LoadingScreen } from '../src/components';
-import { initDatabase, seedSurahs } from '../src/database';
+import { initDatabase, seedSurahs, DatabaseOperations } from '../src/database';
 
 function RootStack() {
   const { isDark } = useTheme();
@@ -21,6 +21,14 @@ function RootStack() {
       try {
         await initDatabase();
         await seedSurahs();
+        
+        // Initialize badges
+        await DatabaseOperations.initializeBadges();
+        
+        // Generate daily challenge if not exists
+        await DatabaseOperations.generateDailyChallenge();
+        
+        console.log('✅ Database setup complete');
       } catch (error) {
         console.error('Error setting up database:', error);
       }
