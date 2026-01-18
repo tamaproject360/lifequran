@@ -4,14 +4,30 @@
  * Dipersembahkan untuk Umat Muslim di Seluruh Dunia 🤲
  */
 
+import { useEffect } from 'react';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { ThemeProvider, useTheme } from '../src/theme/ThemeContext';
 import { useFonts } from '../src/hooks/useFonts';
 import { LoadingScreen } from '../src/components';
+import { initDatabase, seedSurahs } from '../src/database';
 
 function RootStack() {
   const { isDark } = useTheme();
+  
+  useEffect(() => {
+    // Initialize database and seed data
+    const setupDatabase = async () => {
+      try {
+        await initDatabase();
+        await seedSurahs();
+      } catch (error) {
+        console.error('Error setting up database:', error);
+      }
+    };
+    
+    setupDatabase();
+  }, []);
   
   return (
     <>
