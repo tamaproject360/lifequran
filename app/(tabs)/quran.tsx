@@ -182,8 +182,7 @@ export default function QuranScreen() {
               variant="outlined"
               size="small"
               onPress={() => {
-                // TODO: Navigate to reading screen
-                console.log('Open surah:', surah.name);
+                router.push(`/reading?surah=${surah.number}`);
               }}
               style={styles.surahCard}
             >

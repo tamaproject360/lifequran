@@ -19,13 +19,11 @@
       "bundleIdentifier": "com.lifequran.app"
     },
     "android": {
+      "package": "com.lifequran.app",
       "permissions": [
         "NOTIFICATIONS",
-        "VIBRATE",
-        "WAKE_LOCK",
-        "RECEIVE_BOOT_COMPLETED"
-      ],
-      "package": "com.lifequran.app"
+        "VIBRATE"
+      ]
     },
     "web": {
       "bundler": "metro"
@@ -36,13 +34,6 @@
         "expo-notifications",
         {
           "color": "#22C55E"
-        }
-      ],
-      "expo-font",
-      [
-        "expo-av",
-        {
-          "microphonePermission": "Allow $(PRODUCT_NAME) to access your microphone."
         }
       ]
     ],

@@ -81,6 +81,20 @@ export const initDatabase = async () => {
       text TEXT NOT NULL,
       translation TEXT NOT NULL,
       transliteration TEXT,
+      juz_number INTEGER,
+      page_number INTEGER,
+      FOREIGN KEY (surah_id) REFERENCES surahs (id)
+    );
+  `);
+
+  // Create tafsir table
+  await db.execAsync(`
+    CREATE TABLE IF NOT EXISTS tafsir (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      surah_id INTEGER NOT NULL,
+      ayah_number INTEGER NOT NULL,
+      text_short TEXT,
+      text_long TEXT,
       FOREIGN KEY (surah_id) REFERENCES surahs (id)
     );
   `);

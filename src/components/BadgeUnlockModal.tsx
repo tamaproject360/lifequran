@@ -10,6 +10,7 @@ import React, { useEffect } from 'react';
 import { View, Text, Modal, TouchableOpacity, Dimensions } from 'react-native';
 import { MotiView } from 'moti';
 import { Easing } from 'react-native-reanimated';
+import { LinearGradient } from 'expo-linear-gradient';
 import * as Haptics from 'expo-haptics';
 
 const { width } = Dimensions.get('window');
@@ -127,9 +128,14 @@ export const BadgeUnlockModal: React.FC<BadgeUnlockModalProps> = ({
                 style={{ top: -2, left: -2 }}
               />
               
-              <View className="w-24 h-24 rounded-full bg-gradient-to-br from-primary-emerald to-celestial-mint items-center justify-center">
+              <LinearGradient
+                colors={['#22C55E', '#ADFFD8']}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 1 }}
+                style={{ width: 96, height: 96, borderRadius: 48, alignItems: 'center', justifyContent: 'center' }}
+              >
                 <Text className="text-6xl">{badgeIcon}</Text>
-              </View>
+              </LinearGradient>
             </View>
           </MotiView>
 

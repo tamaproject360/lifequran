@@ -10,6 +10,7 @@ import React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { MotiView } from 'moti';
 import { Easing } from 'react-native-reanimated';
+import { LinearGradient } from 'expo-linear-gradient';
 import * as Haptics from 'expo-haptics';
 
 interface BadgeCardProps {
@@ -67,13 +68,21 @@ export const BadgeCard: React.FC<BadgeCardProps> = ({
               damping: 12,
               stiffness: 100,
             }}
-            className={`w-16 h-16 rounded-full items-center justify-center ${
-              unlocked
-                ? 'bg-gradient-to-br from-primary-emerald to-celestial-mint'
-                : 'bg-gray-200 dark:bg-gray-700'
-            }`}
           >
-            <Text className="text-3xl">{unlocked ? icon : '🔒'}</Text>
+            {unlocked ? (
+              <LinearGradient
+                colors={['#22C55E', '#ADFFD8']}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 1 }}
+                style={{ width: 64, height: 64, borderRadius: 32, alignItems: 'center', justifyContent: 'center' }}
+              >
+                <Text className="text-3xl">{icon}</Text>
+              </LinearGradient>
+            ) : (
+              <View className="w-16 h-16 rounded-full bg-gray-200 dark:bg-gray-700 items-center justify-center">
+                <Text className="text-3xl">🔒</Text>
+              </View>
+            )}
           </MotiView>
         </View>
 

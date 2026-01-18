@@ -96,6 +96,10 @@ export default function TutorialScreen() {
     router.replace('/(tabs)/home');
   };
 
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [{ translateX: translateX.value }],
+  }));
+
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
       {/* Slides Container */}
@@ -103,15 +107,7 @@ export default function TutorialScreen() {
         <Animated.View
           style={[
             styles.slides,
-            {
-              transform: [
-                {
-                  translateX: useAnimatedStyle(() => ({
-                    translateX: translateX.value,
-                  })).translateX,
-                },
-              ],
-            },
+            animatedStyle,
           ]}
         >
           {slides.map((slide, index) => (

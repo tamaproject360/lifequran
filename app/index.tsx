@@ -17,11 +17,13 @@ import Animated, {
   withSequence,
   Easing,
 } from 'react-native-reanimated';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { QuranDataImporter } from '../src/database/quranData';
 
 export default function Index() {
   const { theme, isDark } = useTheme();
   const router = useRouter();
+  const [isChecking, setIsChecking] = useState(true);
   
   // Animation values
   const titleOpacity = useSharedValue(0);
@@ -32,6 +34,29 @@ export default function Index() {
   const buttonTranslateY = useSharedValue(20);
 
   useEffect(() => {
+    checkQuranData();
+  }, []);
+
+  const checkQuranData = async () => {
+    try {
+      const exists = await QuranDataImporter.checkDataExists();
+      if (exists) {
+        // Data exists, go to home
+        setTimeout(() => {
+          router.replace('/(tabs)/home');
+        }, 1500);
+      } else {
+        setIsChecking(false);
+        startAnimations();
+      }
+    } catch (error) {
+      console.error('Error checking data:', error);
+      setIsChecking(false);
+      startAnimations();
+    }
+  };
+
+  const startAnimations = () => {
     // Stagger animation sequence
     titleOpacity.value = withTiming(1, {
       duration: theme.duration.slow,
@@ -71,7 +96,7 @@ export default function Index() {
         easing: Easing.out(Easing.exp),
       })
     );
-  }, []);
+  };
 
   const titleStyle = useAnimatedStyle(() => ({
     opacity: titleOpacity.value,
@@ -89,9 +114,33 @@ export default function Index() {
   }));
 
   const handleGetStarted = () => {
-    // Navigate to onboarding
-    router.push('/(onboarding)/welcome');
+    // Navigate to data import screen
+    router.push('/dataImport');
   };
+
+  if (isChecking) {
+    return (
+      <View
+        style={[
+          styles.container,
+          { backgroundColor: theme.colors.background, justifyContent: 'center', alignItems: 'center' },
+        ]}
+      >
+        <Text
+          style={[
+            styles.title,
+            {
+              color: theme.primary.emerald,
+              fontFamily: theme.fontFamily.satoshi.black,
+              fontSize: theme.fontSize.display.medium,
+            },
+          ]}
+        >
+          LifeQuran
+        </Text>
+      </View>
+    );
+  }
 
   return (
     <View

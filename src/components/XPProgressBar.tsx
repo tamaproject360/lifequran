@@ -11,11 +11,11 @@ import { View, Text } from 'react-native';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
-  withTiming,
   withSpring,
   Easing,
 } from 'react-native-reanimated';
 import { MotiView } from 'moti';
+import { LinearGradient } from 'expo-linear-gradient';
 
 interface XPProgressBarProps {
   currentXP: number;
@@ -81,10 +81,14 @@ export const XPProgressBar: React.FC<XPProgressBarProps> = ({
       {/* Progress Bar */}
       <View className="mb-2">
         <View className="h-3 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
-          <Animated.View
-            style={[animatedProgressStyle]}
-            className="h-full bg-gradient-to-r from-primary-emerald to-celestial-mint rounded-full"
-          />
+          <Animated.View style={[animatedProgressStyle, { height: '100%' }]}>
+            <LinearGradient
+              colors={['#22C55E', '#ADFFD8']}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 0 }}
+              style={{ height: '100%', borderRadius: 9999 }}
+            />
+          </Animated.View>
         </View>
       </View>
 

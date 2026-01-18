@@ -95,7 +95,7 @@
 | No | Tugas | Status | Prioritas | Phase |
 |----|-------|--------|-----------|-------|
 | 34 | Download & prepare Al-Qur'an data (30 Juz, 114 Surah, Uthmani script) | ✅ Completed | Critical | 1 |
-| 35 | Download & prepare terjemahan Indonesia (Kemenag RI) | ⬜ Pending | Critical | 1 |
+| 35 | Download & prepare terjemahan Indonesia (Kemenag RI) | ✅ Completed | Critical | 1 |
 | 36 | Create SQLite database schema untuk Quran data | ✅ Completed | Critical | 1 |
 | 37 | Import Al-Qur'an text & terjemahan ke SQLite | ✅ Completed | Critical | 1 |
 | 38 | Create database queries untuk fetch by Surah/Juz/Page | ✅ Completed | Critical | 1 |
@@ -106,13 +106,13 @@
 | No | Tugas | Status | Prioritas | Phase |
 |----|-------|--------|-----------|-------|
 | 40 | Create Surah List screen dengan search & filter | ✅ Completed | Critical | 1 |
-| 41 | Create Juz List screen | ⬜ Pending | Critical | 1 |
-| 42 | Build main Reading Screen (Zen Mode) | ⬜ Pending | Critical | 1 |
+| 41 | Create Juz List screen | ✅ Completed | Critical | 1 |
+| 42 | Build main Reading Screen (Zen Mode) | 🔄 In Progress | Critical | 1 |
 | 43 | Implement Arabic text rendering dengan Uthmani font | ⬜ Pending | Critical | 1 |
-| 44 | Display terjemahan Indonesia di bawah ayat | ⬜ Pending | Critical | 1 |
-| 45 | Implement smooth scrolling dengan 60fps | ⬜ Pending | Critical | 1 |
-| 46 | Add "Screen Always On" saat membaca | ⬜ Pending | High | 1 |
-| 47 | Create verse number indicator | ⬜ Pending | High | 1 |
+| 44 | Display terjemahan Indonesia di bawah ayat | ✅ Completed | Critical | 1 |
+| 45 | Implement smooth scrolling dengan 60fps | ✅ Completed | Critical | 1 |
+| 46 | Add "Screen Always On" saat membaca | ✅ Completed | High | 1 |
+| 47 | Create verse number indicator | ✅ Completed | High | 1 |
 
 ### Bookmark & Search
 
@@ -368,9 +368,9 @@
 ## 📊 Progress Summary
 
 **Total Tasks**: 158
-**Completed**: 0
-**In Progress**: 0
-**Pending**: 158
+**Completed**: 78
+**In Progress**: 1
+**Pending**: 79
 
 ---
 

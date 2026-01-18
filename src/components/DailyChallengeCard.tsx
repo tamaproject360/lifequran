@@ -15,6 +15,7 @@ import Animated, {
   withSpring,
   Easing,
 } from 'react-native-reanimated';
+import { LinearGradient } from 'expo-linear-gradient';
 import * as Haptics from 'expo-haptics';
 
 interface DailyChallengeCardProps {
@@ -99,14 +100,18 @@ export const DailyChallengeCard: React.FC<DailyChallengeCardProps> = ({
         {/* Progress Bar */}
         <View className="mb-2">
           <View className="h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
-            <Animated.View
-              style={[animatedProgressStyle]}
-              className={`h-full rounded-full ${
-                completed
-                  ? 'bg-primary-emerald'
-                  : 'bg-gradient-to-r from-primary-emerald to-celestial-mint'
-              }`}
-            />
+            <Animated.View style={[animatedProgressStyle, { height: '100%' }]}>
+              {completed ? (
+                <View className="h-full bg-primary-emerald rounded-full" />
+              ) : (
+                <LinearGradient
+                  colors={['#22C55E', '#ADFFD8']}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 1, y: 0 }}
+                  style={{ height: '100%', borderRadius: 9999 }}
+                />
+              )}
+            </Animated.View>
           </View>
         </View>
 

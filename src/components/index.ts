@@ -24,3 +24,4 @@ export { DailyChallengeCard } from './DailyChallengeCard';
 export { BadgeCard } from './BadgeCard';
 export { LevelUpModal } from './LevelUpModal';
 export { BadgeUnlockModal } from './BadgeUnlockModal';
+export { WavyShape } from './WavyShape';

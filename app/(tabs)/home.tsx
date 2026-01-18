@@ -184,7 +184,7 @@ export default function HomeScreen() {
               target={dailyChallenge.targetValue}
               xpReward={dailyChallenge.xpReward}
               completed={dailyChallenge.completed}
-              onPress={() => router.push('/quran')}
+              onPress={() => router.push('/(tabs)/quran')}
             />
           </View>
         )}
@@ -206,7 +206,7 @@ export default function HomeScreen() {
                   {lastRead.surah}, Ayat {lastRead.ayah}
                 </Text>
               </View>
-              <Button variant="primary" size="small" onPress={() => router.push('/quran')}>
+              <Button variant="primary" size="small" onPress={() => router.push('/(tabs)/quran')}>
                 Baca →
               </Button>
             </View>
@@ -235,9 +235,14 @@ export default function HomeScreen() {
               {recentBadges.map((badge, index) => (
                 <View key={badge.id} className="w-32">
                   <View className="bg-white dark:bg-gray-800 rounded-2xl p-4 items-center">
-                    <View className="w-16 h-16 rounded-full bg-gradient-to-br from-primary-emerald to-celestial-mint items-center justify-center mb-2">
+                    <LinearGradient
+                      colors={['#22C55E', '#ADFFD8']}
+                      start={{ x: 0, y: 0 }}
+                      end={{ x: 1, y: 1 }}
+                      style={{ width: 64, height: 64, borderRadius: 32, alignItems: 'center', justifyContent: 'center', marginBottom: 8 }}
+                    >
                       <Text className="text-3xl">{badge.icon}</Text>
-                    </View>
+                    </LinearGradient>
                     <Text className="text-xs font-satoshi-bold text-gray-900 dark:text-white text-center" numberOfLines={2}>
                       {badge.name}
                     </Text>
