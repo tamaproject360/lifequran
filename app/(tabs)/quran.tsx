@@ -1,7 +1,7 @@
 /**
  * LifeQuran Al-Qur'an Screen
  * 
- * Daftar Surah dan navigasi ke reading screen
+ * Premium Surah list dengan Divine Nature Architecture
  * 
  * Dipersembahkan untuk Umat Muslim di Seluruh Dunia 🤲
  */
@@ -10,17 +10,24 @@ import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
-  StyleSheet,
   ScrollView,
   TextInput,
-  Pressable,
+  TouchableOpacity,
+  Dimensions,
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useTheme } from '../../src/theme/ThemeContext';
-import { Card, Loading } from '../../src/components';
-import Animated, { FadeInDown } from 'react-native-reanimated';
+import { LoadingScreen, WavyShape } from '../../src/components';
+import { MotiView } from 'moti';
+import { Easing } from 'react-native-reanimated';
 import { StatusBar } from 'expo-status-bar';
 import { DatabaseOperations } from '../../src/database';
+import { Ionicons } from '@expo/vector-icons';
+import { colors } from '../../src/theme/colors';
+import { LinearGradient } from 'expo-linear-gradient';
+import * as Haptics from 'expo-haptics';
+
+const { width } = Dimensions.get('window');
 
 interface SurahItem {
   number: number;
@@ -66,286 +73,215 @@ export default function QuranScreen() {
       surah.arabicName.includes(searchQuery)
   );
 
+  const handleTabChange = (tab: 'surah' | 'juz') => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    setActiveTab(tab);
+  };
+
+  const handleSurahPress = (surahNumber: number) => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    router.push(`/reading?surah=${surahNumber}`);
+  };
+
+  if (isLoading) {
+    return <LoadingScreen />;
+  }
+
   return (
-    <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
+    <View className="flex-1 bg-white dark:bg-midnight-emerald">
       <StatusBar style={isDark ? 'light' : 'dark'} />
       
-      {/* Header */}
-      <View
-        style={[
-          styles.header,
-          { backgroundColor: theme.colors.background, borderBottomColor: theme.colors.border },
-        ]}
-      >
-        <Text
-          style={[
-            styles.title,
-            {
-              color: theme.colors.text.primary,
-              fontFamily: theme.fontFamily.satoshi.bold,
-            },
-          ]}
+      {/* Header with Wave */}
+      <View className="relative">
+        <LinearGradient
+          colors={
+            isDark
+              ? ['#022C22', '#022C22']
+              : ['#F0FDF4', '#FFFFFF']
+          }
+          className="pt-16 pb-6"
         >
-          Al-Qur'an
-        </Text>
-        
-        {/* Search Bar */}
-        <View
-          style={[
-            styles.searchBar,
-            {
-              backgroundColor: theme.colors.surface,
-              borderColor: theme.colors.border,
-            },
-          ]}
-        >
-          <Text style={styles.searchIcon}>🔍</Text>
-          <TextInput
-            style={[
-              styles.searchInput,
-              {
-                color: theme.colors.text.primary,
-                fontFamily: theme.fontFamily.satoshi.regular,
-              },
-            ]}
-            placeholder="Cari surah..."
-            placeholderTextColor={theme.colors.text.tertiary}
-            value={searchQuery}
-            onChangeText={setSearchQuery}
-          />
-        </View>
+          {/* Wavy Shape Background */}
+          <View className="absolute top-0 left-0 right-0">
+            <WavyShape width={width} height={180} variant="top" opacity={0.1} />
+          </View>
+          
+          <View className="px-6 relative z-10">
+            {/* Title */}
+            <MotiView
+              from={{ opacity: 0, translateY: -20 }}
+              animate={{ opacity: 1, translateY: 0 }}
+              transition={{ type: 'timing', duration: 600, easing: Easing.out(Easing.exp) }}
+            >
+              <Text className="text-3xl font-satoshi-bold text-gray-900 dark:text-white mb-1">
+                Al-Qur'an
+              </Text>
+              <Text className="text-sm font-satoshi text-gray-600 dark:text-gray-400 mb-4">
+                114 Surah • 30 Juz
+              </Text>
+            </MotiView>
 
-        {/* Tab Switcher */}
-        <View style={styles.tabSwitcher}>
-          <Pressable
-            style={[
-              styles.tab,
-              activeTab === 'surah' && {
-                backgroundColor: theme.primary.emerald,
-              },
-            ]}
-            onPress={() => setActiveTab('surah')}
-          >
-            <Text
-              style={[
-                styles.tabText,
-                {
-                  color: activeTab === 'surah' ? '#FFFFFF' : theme.colors.text.secondary,
-                  fontFamily: theme.fontFamily.satoshi.medium,
-                },
-              ]}
+            {/* Search Bar */}
+            <MotiView
+              from={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ type: 'timing', duration: 600, delay: 100 }}
             >
-              Surah
-            </Text>
-          </Pressable>
-          <Pressable
-            style={[
-              styles.tab,
-              activeTab === 'juz' && {
-                backgroundColor: theme.primary.emerald,
-              },
-            ]}
-            onPress={() => setActiveTab('juz')}
-          >
-            <Text
-              style={[
-                styles.tabText,
-                {
-                  color: activeTab === 'juz' ? '#FFFFFF' : theme.colors.text.secondary,
-                  fontFamily: theme.fontFamily.satoshi.medium,
-                },
-              ]}
+              <View className="bg-white dark:bg-gray-800 rounded-2xl px-4 py-3 flex-row items-center shadow-sm border border-gray-200 dark:border-gray-700">
+                <Ionicons name="search" size={20} color={colors.gray[400]} />
+                <TextInput
+                  className="flex-1 ml-3 text-base font-satoshi text-gray-900 dark:text-white"
+                  placeholder="Cari surah..."
+                  placeholderTextColor={colors.gray[400]}
+                  value={searchQuery}
+                  onChangeText={setSearchQuery}
+                />
+                {searchQuery.length > 0 && (
+                  <TouchableOpacity onPress={() => setSearchQuery('')}>
+                    <Ionicons name="close-circle" size={20} color={colors.gray[400]} />
+                  </TouchableOpacity>
+                )}
+              </View>
+            </MotiView>
+
+            {/* Tab Switcher */}
+            <MotiView
+              from={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ type: 'timing', duration: 600, delay: 150 }}
+              className="mt-4"
             >
-              Juz
-            </Text>
-          </Pressable>
-        </View>
+              <View className="bg-gray-100 dark:bg-gray-800 rounded-2xl p-1 flex-row">
+                <TouchableOpacity
+                  onPress={() => handleTabChange('surah')}
+                  className="flex-1"
+                  activeOpacity={0.7}
+                >
+                  <View
+                    className={`py-3 rounded-xl items-center ${
+                      activeTab === 'surah'
+                        ? 'bg-primary-emerald'
+                        : 'bg-transparent'
+                    }`}
+                  >
+                    <Text
+                      className={`text-sm font-satoshi-bold ${
+                        activeTab === 'surah'
+                          ? 'text-white'
+                          : 'text-gray-600 dark:text-gray-400'
+                      }`}
+                    >
+                      Surah
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+                
+                <TouchableOpacity
+                  onPress={() => handleTabChange('juz')}
+                  className="flex-1"
+                  activeOpacity={0.7}
+                >
+                  <View
+                    className={`py-3 rounded-xl items-center ${
+                      activeTab === 'juz'
+                        ? 'bg-primary-emerald'
+                        : 'bg-transparent'
+                    }`}
+                  >
+                    <Text
+                      className={`text-sm font-satoshi-bold ${
+                        activeTab === 'juz'
+                          ? 'text-white'
+                          : 'text-gray-600 dark:text-gray-400'
+                      }`}
+                    >
+                      Juz
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+              </View>
+            </MotiView>
+          </View>
+        </LinearGradient>
       </View>
 
       {/* Surah List */}
-      <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollContent}>
-        {isLoading ? (
-          <Loading.LoadingScreen message="Memuat Al-Qur'an..." />
-        ) : filteredSurahs.length === 0 ? (
-          <View style={styles.emptyState}>
-            <Text style={[styles.emptyText, { color: theme.colors.text.secondary }]}>
+      <ScrollView
+        className="flex-1"
+        contentContainerStyle={{ paddingHorizontal: 24, paddingTop: 16, paddingBottom: 32 }}
+        showsVerticalScrollIndicator={false}
+      >
+        {filteredSurahs.length === 0 ? (
+          <View className="items-center py-16">
+            <Text className="text-6xl mb-4">🔍</Text>
+            <Text className="text-base font-satoshi text-gray-500 dark:text-gray-400">
               Tidak ada surah yang ditemukan
             </Text>
           </View>
         ) : (
           filteredSurahs.map((surah, index) => (
-          <Animated.View
-            key={surah.number}
-            entering={FadeInDown.delay(index * 30).duration(400)}
-          >
-            <Card
-              variant="outlined"
-              size="small"
-              onPress={() => {
-                router.push(`/reading?surah=${surah.number}`);
+            <MotiView
+              key={surah.number}
+              from={{ opacity: 0, translateY: 20 }}
+              animate={{ opacity: 1, translateY: 0 }}
+              transition={{
+                type: 'timing',
+                duration: 400,
+                delay: index * 30,
+                easing: Easing.out(Easing.exp),
               }}
-              style={styles.surahCard}
             >
-              <View style={styles.surahContent}>
-                <View
-                  style={[
-                    styles.surahNumber,
-                    { backgroundColor: theme.primary.emerald + '20' },
-                  ]}
-                >
-                  <Text
-                    style={[
-                      styles.surahNumberText,
-                      {
-                        color: theme.primary.emerald,
-                        fontFamily: theme.fontFamily.satoshi.bold,
-                      },
-                    ]}
-                  >
-                    {surah.number}
-                  </Text>
-                </View>
-                
-                <View style={styles.surahInfo}>
-                  <Text
-                    style={[
-                      styles.surahName,
-                      {
-                        color: theme.colors.text.primary,
-                        fontFamily: theme.fontFamily.satoshi.bold,
-                      },
-                    ]}
-                  >
-                    {surah.name}
-                  </Text>
-                  <Text
-                    style={[
-                      styles.surahMeta,
-                      {
-                        color: theme.colors.text.secondary,
-                        fontFamily: theme.fontFamily.satoshi.regular,
-                      },
-                    ]}
-                  >
-                    {surah.type} • {surah.ayahs} Ayat
-                  </Text>
-                </View>
+              <TouchableOpacity
+                onPress={() => handleSurahPress(surah.number)}
+                activeOpacity={0.7}
+                className="mb-3"
+              >
+                <View className="bg-white dark:bg-gray-800 rounded-2xl p-4 flex-row items-center shadow-sm border border-gray-100 dark:border-gray-700">
+                  {/* Surah Number */}
+                  <View className="w-12 h-12 rounded-full bg-primary-emerald/10 items-center justify-center mr-4">
+                    <Text className="text-base font-satoshi-bold text-primary-emerald">
+                      {surah.number}
+                    </Text>
+                  </View>
 
-                <Text
-                  style={[
-                    styles.surahArabic,
-                    {
-                      color: theme.primary.emerald,
-                      fontFamily: theme.fontFamily.uthmani.regular,
-                    },
-                  ]}
-                >
-                  {surah.arabicName}
-                </Text>
-              </View>
-            </Card>
-          </Animated.View>
+                  {/* Surah Info */}
+                  <View className="flex-1">
+                    <Text className="text-base font-satoshi-bold text-gray-900 dark:text-white mb-1">
+                      {surah.name}
+                    </Text>
+                    <View className="flex-row items-center">
+                      <Text className="text-xs font-satoshi text-gray-500 dark:text-gray-400">
+                        {surah.type}
+                      </Text>
+                      <View className="w-1 h-1 rounded-full bg-gray-400 mx-2" />
+                      <Text className="text-xs font-satoshi text-gray-500 dark:text-gray-400">
+                        {surah.ayahs} Ayat
+                      </Text>
+                    </View>
+                  </View>
+
+                  {/* Arabic Name */}
+                  <Text className="text-xl font-instrument-serif text-primary-emerald ml-3">
+                    {surah.arabicName}
+                  </Text>
+                </View>
+              </TouchableOpacity>
+            </MotiView>
           ))
         )}
+
+        {/* Signature */}
+        <MotiView
+          from={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ type: 'timing', duration: 800, delay: 500 }}
+          className="mt-8 items-center"
+        >
+          <Text className="text-xs font-instrument-serif-italic text-gray-400 dark:text-gray-600 text-center">
+            Dipersembahkan untuk Umat Muslim di Seluruh Dunia 🤲
+          </Text>
+        </MotiView>
       </ScrollView>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  header: {
-    paddingTop: 60,
-    paddingHorizontal: 24,
-    paddingBottom: 16,
-    borderBottomWidth: 1,
-  },
-  title: {
-    fontSize: 28,
-    marginBottom: 16,
-  },
-  searchBar: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    height: 44,
-    borderRadius: 12,
-    borderWidth: 1,
-    paddingHorizontal: 16,
-    marginBottom: 16,
-  },
-  searchIcon: {
-    fontSize: 18,
-    marginRight: 8,
-  },
-  searchInput: {
-    flex: 1,
-    fontSize: 16,
-  },
-  tabSwitcher: {
-    flexDirection: 'row',
-    backgroundColor: 'rgba(0,0,0,0.05)',
-    borderRadius: 12,
-    padding: 4,
-    gap: 4,
-  },
-  tab: {
-    flex: 1,
-    paddingVertical: 10,
-    borderRadius: 8,
-    alignItems: 'center',
-  },
-  tabText: {
-    fontSize: 14,
-  },
-  scrollView: {
-    flex: 1,
-  },
-  scrollContent: {
-    padding: 24,
-    gap: 12,
-  },
-  surahCard: {
-    marginBottom: 0,
-  },
-  surahContent: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 12,
-  },
-  surahNumber: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  surahNumberText: {
-    fontSize: 16,
-  },
-  surahInfo: {
-    flex: 1,
-  },
-  surahName: {
-    fontSize: 16,
-    marginBottom: 2,
-  },
-  surahMeta: {
-    fontSize: 13,
-  },
-  surahArabic: {
-    fontSize: 20,
-  },
-  emptyState: {
-    alignItems: 'center',
-    paddingVertical: 60,
-  },
-  emptyIcon: {
-    fontSize: 48,
-    marginBottom: 16,
-  },
-  emptyText: {
-    fontSize: 16,
-  },
-});
