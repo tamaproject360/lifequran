@@ -23,7 +23,7 @@ import { Easing } from 'react-native-reanimated';
 import { StatusBar } from 'expo-status-bar';
 import { DatabaseOperations } from '../../src/database';
 import { Ionicons } from '@expo/vector-icons';
-import { colors } from '../../src/theme/colors';
+import { Colors } from '../../src/theme/colors';
 import { LinearGradient } from 'expo-linear-gradient';
 import * as Haptics from 'expo-haptics';
 
@@ -128,17 +128,17 @@ export default function QuranScreen() {
               transition={{ type: 'timing', duration: 600, delay: 100 }}
             >
               <View className="bg-white dark:bg-gray-800 rounded-2xl px-4 py-3 flex-row items-center shadow-sm border border-gray-200 dark:border-gray-700">
-                <Ionicons name="search" size={20} color={colors.gray[400]} />
+                <Ionicons name="search" size={20} color={Colors.light.text.tertiary} />
                 <TextInput
                   className="flex-1 ml-3 text-base font-satoshi text-gray-900 dark:text-white"
                   placeholder="Cari surah..."
-                  placeholderTextColor={colors.gray[400]}
+                  placeholderTextColor={Colors.light.text.tertiary}
                   value={searchQuery}
                   onChangeText={setSearchQuery}
                 />
                 {searchQuery.length > 0 && (
                   <TouchableOpacity onPress={() => setSearchQuery('')}>
-                    <Ionicons name="close-circle" size={20} color={colors.gray[400]} />
+                    <Ionicons name="close-circle" size={20} color={Colors.light.text.tertiary} />
                   </TouchableOpacity>
                 )}
               </View>

@@ -33,3 +33,11 @@ export { TafsirCard } from './TafsirCard';
 export { SurahVirtueCard } from './SurahVirtueCard';
 export { AsbabunNuzulCard } from './AsbabunNuzulCard';
 export { DuaCard } from './DuaCard';
+
+// Phase 4: Statistics & Progress Components
+export { HeatmapCalendar } from './HeatmapCalendar';
+export { GrowthMapTimeline } from './GrowthMapTimeline';
+
+// Phase 5: Personalization Components
+export { FontSizeAdjuster } from './FontSizeAdjuster';
+export { SettingsSection, SettingsItem } from './SettingsSection';

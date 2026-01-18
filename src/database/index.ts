@@ -57,10 +57,13 @@ export interface UserStats {
 
 // Initialize database
 export const initDatabase = async () => {
-  const db = await SQLite.openDatabaseAsync('lifequran.db');
+  try {
+    const db = await SQLite.openDatabaseAsync('lifequran.db', {
+      useNewConnection: true, // Fix for Android NullPointerException
+    });
 
-  // Create surahs table
-  await db.execAsync(`
+    // Create surahs table
+    await db.execAsync(`
     CREATE TABLE IF NOT EXISTS surahs (
       id INTEGER PRIMARY KEY,
       name TEXT NOT NULL,
@@ -252,13 +255,24 @@ export const initDatabase = async () => {
     );
   `);
 
-  console.log('✅ Database initialized successfully');
-  return db;
+    console.log('✅ Database initialized successfully');
+    return db;
+  } catch (error) {
+    console.error('❌ Database initialization error:', error);
+    throw error;
+  }
 };
 
 // Get database instance
 export const getDatabase = async () => {
-  return await SQLite.openDatabaseAsync('lifequran.db');
+  try {
+    return await SQLite.openDatabaseAsync('lifequran.db', {
+      useNewConnection: true, // Fix for Android NullPointerException
+    });
+  } catch (error) {
+    console.error('❌ Error opening database:', error);
+    throw error;
+  }
 };
 
 // Database operations
@@ -316,7 +330,7 @@ export const DatabaseOperations = {
     const db = await getDatabase();
     const result = await db.runAsync(
       'INSERT INTO bookmarks (surah_id, ayah_id, note) VALUES (?, ?, ?)',
-      [surahId, ayahId, note || null]
+      [surahId, ayahId, note ?? null]
     );
     return result.lastInsertRowId;
   },
@@ -421,7 +435,7 @@ export const DatabaseOperations = {
     // Add XP transaction
     await db.runAsync(
       'INSERT INTO xp_transactions (amount, source, description) VALUES (?, ?, ?)',
-      [amount, source, description || null]
+      [amount, source, description ?? null]
     );
 
     // Update total XP
@@ -688,7 +702,7 @@ export const DatabaseOperations = {
     const db = await getDatabase();
     await db.runAsync(
       'INSERT INTO tafsir (surah_id, ayah_number, text_short, text_long) VALUES (?, ?, ?, ?)',
-      [surahId, ayahNumber, textShort, textLong || null]
+      [surahId, ayahNumber, textShort, textLong ?? null]
     );
   },
 
@@ -705,7 +719,7 @@ export const DatabaseOperations = {
     const db = await getDatabase();
     await db.runAsync(
       'INSERT INTO asbabun_nuzul (surah_id, ayah_number, story, source) VALUES (?, ?, ?, ?)',
-      [surahId, ayahNumber || null, story, source || null]
+      [surahId, ayahNumber ?? null, story, source ?? null]
     );
   },
 
@@ -722,7 +736,7 @@ export const DatabaseOperations = {
     const db = await getDatabase();
     await db.runAsync(
       'INSERT OR REPLACE INTO surah_virtues (surah_id, virtue_text, hadith_reference) VALUES (?, ?, ?)',
-      [surahId, virtueText, hadithReference || null]
+      [surahId, virtueText, hadithReference ?? null]
     );
   },
 
@@ -744,7 +758,7 @@ export const DatabaseOperations = {
     const db = await getDatabase();
     await db.runAsync(
       'INSERT INTO daily_duas (title, arabic_text, transliteration, translation, category, reference) VALUES (?, ?, ?, ?, ?, ?)',
-      [title, arabicText, transliteration || null, translation, category, reference || null]
+      [title, arabicText, transliteration ?? null, translation, category, reference ?? null]
     );
   },
 
@@ -765,7 +779,7 @@ export const DatabaseOperations = {
     const db = await getDatabase();
     await db.runAsync(
       'INSERT INTO motivational_quotes (text, author, category, is_quranic) VALUES (?, ?, ?, ?)',
-      [text, author || null, category || null, isQuranic ? 1 : 0]
+      [text, author ?? null, category ?? null, isQuranic ? 1 : 0]
     );
   },
 

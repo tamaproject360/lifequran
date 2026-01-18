@@ -217,3 +217,7 @@ export { useGamificationStore } from './gamificationStore';
 // Export audio store
 export { useAudioStore, AVAILABLE_QARIS } from './audioStore';
 export type { Qari, AudioState } from './audioStore';
+
+// Export settings store
+export { useSettingsStore } from './settingsStore';
+export type { ReadingSettings, AppSettings } from './settingsStore';

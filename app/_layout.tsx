@@ -19,18 +19,25 @@ function RootStack() {
     // Initialize database and seed data
     const setupDatabase = async () => {
       try {
-        await initDatabase();
+        console.log('🔄 Starting database setup...');
+        const db = await initDatabase();
+        console.log('✅ Database initialized');
+        
         await seedSurahs();
+        console.log('✅ Surahs seeded');
         
         // Initialize badges
         await DatabaseOperations.initializeBadges();
+        console.log('✅ Badges initialized');
         
         // Generate daily challenge if not exists
         await DatabaseOperations.generateDailyChallenge();
+        console.log('✅ Daily challenge generated');
         
         console.log('✅ Database setup complete');
       } catch (error) {
-        console.error('Error setting up database:', error);
+        console.error('❌ Error setting up database:', error);
+        console.error('Error details:', JSON.stringify(error, null, 2));
       }
     };
     

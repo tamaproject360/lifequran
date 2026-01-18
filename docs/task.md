@@ -222,14 +222,14 @@
 
 | No | Tugas | Status | Prioritas | Phase |
 |----|-------|--------|-----------|-------|
-| 96 | Create Progress/Statistics screen layout | ⬜ Pending | Medium | 4 |
-| 97 | Implement reading history tracking & display | ⬜ Pending | Medium | 4 |
-| 98 | Build heatmap calendar visualization | ⬜ Pending | Medium | 4 |
-| 99 | Create weekly/monthly report generator | ⬜ Pending | Medium | 4 |
-| 100 | Implement time spent statistics | ⬜ Pending | Medium | 4 |
-| 101 | Create prediksi khatam calculator | ⬜ Pending | Medium | 4 |
-| 102 | Build progress bar untuk total Al-Qur'an | ⬜ Pending | Medium | 4 |
-| 103 | Implement Growth Map visualization (vertical timeline) | ⬜ Pending | Low | 4 |
+| 96 | Create Progress/Statistics screen layout | ✅ Completed | Medium | 4 |
+| 97 | Implement reading history tracking & display | ✅ Completed | Medium | 4 |
+| 98 | Build heatmap calendar visualization | ✅ Completed | Medium | 4 |
+| 99 | Create weekly/monthly report generator | ✅ Completed | Medium | 4 |
+| 100 | Implement time spent statistics | ✅ Completed | Medium | 4 |
+| 101 | Create prediksi khatam calculator | ✅ Completed | Medium | 4 |
+| 102 | Build progress bar untuk total Al-Qur'an | ✅ Completed | Medium | 4 |
+| 103 | Implement Growth Map visualization (vertical timeline) | ✅ Completed | Low | 4 |
 
 ---
 
@@ -239,20 +239,20 @@
 
 | No | Tugas | Status | Prioritas | Phase |
 |----|-------|--------|-----------|-------|
-| 104 | Implement font size adjuster (Arabic & terjemahan) | ⬜ Pending | Medium | 5 |
+| 104 | Implement font size adjuster (Arabic & terjemahan) | ✅ Completed | Medium | 5 |
 | 105 | Add Arabic font selection (multiple Uthmani variants) | ⬜ Pending | Medium | 5 |
 | 106 | Create landscape mode support | ⬜ Pending | Medium | 5 |
-| 107 | Implement custom daily target setting | ⬜ Pending | Medium | 5 |
-| 108 | Add night mode auto-switch (time-based) | ⬜ Pending | Medium | 5 |
+| 107 | Implement custom daily target setting | ✅ Completed | Medium | 5 |
+| 108 | Add night mode auto-switch (time-based) | ✅ Completed | Medium | 5 |
 
 ### Profile & Settings
 
 | No | Tugas | Status | Prioritas | Phase |
 |----|-------|--------|-----------|-------|
-| 109 | Create Profile screen layout | ⬜ Pending | Medium | 5 |
+| 109 | Create Profile screen layout | ✅ Completed | Medium | 5 |
 | 110 | Implement profile avatar upload/selection | ⬜ Pending | Low | 5 |
-| 111 | Build Settings screen dengan categories | ⬜ Pending | Medium | 5 |
-| 112 | Create theme customization options | ⬜ Pending | Medium | 5 |
+| 111 | Build Settings screen dengan categories | ✅ Completed | Medium | 5 |
+| 112 | Create theme customization options | ✅ Completed | Medium | 5 |
 | 113 | Add "About App" & credits page | ⬜ Pending | Low | 5 |
 
 ---
@@ -368,9 +368,9 @@
 ## 📊 Progress Summary
 
 **Total Tasks**: 158
-**Completed**: 89
+**Completed**: 102
 **In Progress**: 0
-**Pending**: 69
+**Pending**: 56
 
 ---
 

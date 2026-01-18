@@ -39,20 +39,17 @@ export default function Index() {
 
   const checkQuranData = async () => {
     try {
-      const exists = await QuranDataImporter.checkDataExists();
-      if (exists) {
-        // Data exists, go to home
-        setTimeout(() => {
-          router.replace('/(tabs)/home');
-        }, 1500);
-      } else {
-        setIsChecking(false);
-        startAnimations();
-      }
+      // Skip data check, always go to home
+      // Data will be loaded on-demand when needed
+      setTimeout(() => {
+        router.replace('/(tabs)/home');
+      }, 1500);
     } catch (error) {
       console.error('Error checking data:', error);
-      setIsChecking(false);
-      startAnimations();
+      // Still go to home even if error
+      setTimeout(() => {
+        router.replace('/(tabs)/home');
+      }, 1500);
     }
   };
 

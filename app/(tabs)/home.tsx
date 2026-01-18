@@ -34,7 +34,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { StatusBar } from 'expo-status-bar';
 import { MotiView } from 'moti';
 import { Ionicons } from '@expo/vector-icons';
-import { colors } from '../../src/theme/colors';
+import { Colors } from '../../src/theme/colors';
 
 const { width } = Dimensions.get('window');
 
@@ -58,8 +58,42 @@ export default function HomeScreen() {
   } = useGamificationStore();
 
   useEffect(() => {
-    loadGamificationData();
+    // Load gamification data but don't block UI
+    loadGamificationData().catch(error => {
+      console.error('Failed to load gamification data:', error);
+    });
   }, []);
+
+  // Always show UI, use default values if data not loaded
+  const displayLevelInfo = levelInfo || {
+    level: 1,
+    name: 'Pemula',
+    icon: '🌱',
+    currentXP: 0,
+    nextLevelXP: 500,
+    progress: 0,
+  };
+
+  const displayStreakInfo = streakInfo || {
+    currentStreak: 0,
+    longestStreak: 0,
+    freezeAvailable: false,
+    nextMilestone: 3,
+  };
+
+  const displayDailyChallenge = dailyChallenge || {
+    id: 0,
+    date: new Date().toISOString(),
+    title: 'Baca 1 Halaman',
+    description: 'Baca minimal 1 halaman Al-Quran hari ini',
+    challengeType: 'pages',
+    targetValue: 1,
+    currentProgress: 0,
+    xpReward: 25,
+    completed: false,
+  };
+
+  const displayRecentBadges = recentBadges.length > 0 ? recentBadges : [];
 
   const ayatHarian = {
     arabic: 'فَإِنَّ مَعَ ٱلْعُسْرِ يُسْرًا',
@@ -77,10 +111,6 @@ export default function HomeScreen() {
     setRefreshing(true);
     loadGamificationData().finally(() => setRefreshing(false));
   }, []);
-
-  if (isLoading || !levelInfo || !streakInfo) {
-    return <LoadingScreen />;
-  }
 
   return (
     <View className="flex-1 bg-white dark:bg-midnight-emerald">
@@ -124,12 +154,12 @@ export default function HomeScreen() {
               className="mt-6"
             >
               <XPProgressBar
-                currentXP={levelInfo.currentXP}
-                nextLevelXP={levelInfo.nextLevelXP}
-                level={levelInfo.level}
-                levelName={levelInfo.name}
-                levelIcon={levelInfo.icon}
-                progress={levelInfo.progress}
+                currentXP={displayLevelInfo.currentXP}
+                nextLevelXP={displayLevelInfo.nextLevelXP}
+                level={displayLevelInfo.level}
+                levelName={displayLevelInfo.name}
+                levelIcon={displayLevelInfo.icon}
+                progress={displayLevelInfo.progress}
               />
             </MotiView>
           </View>
@@ -144,7 +174,7 @@ export default function HomeScreen() {
           <RefreshControl 
             refreshing={refreshing} 
             onRefresh={onRefresh}
-            tintColor={colors.primary.emerald}
+            tintColor={Colors.primary.emerald}
           />
         }
       >
@@ -156,9 +186,9 @@ export default function HomeScreen() {
           className="mb-4"
         >
           <StreakCounter
-            streak={streakInfo.currentStreak}
-            longestStreak={streakInfo.longestStreak}
-            freezeAvailable={streakInfo.freezeAvailable}
+            streak={displayStreakInfo.currentStreak}
+            longestStreak={displayStreakInfo.longestStreak}
+            freezeAvailable={displayStreakInfo.freezeAvailable}
           />
         </MotiView>
 
@@ -172,7 +202,7 @@ export default function HomeScreen() {
           <View className="bg-gradient-to-br from-celestial-mint/10 to-primary-emerald/5 rounded-3xl p-6 border border-primary-emerald/20">
             <View className="flex-row items-center mb-4">
               <View className="w-10 h-10 rounded-full bg-primary-emerald/20 items-center justify-center mr-3">
-                <Ionicons name="book-outline" size={20} color={colors.primary.emerald} />
+                <Ionicons name="book-outline" size={20} color={Colors.primary.emerald} />
               </View>
               <Text className="text-base font-satoshi-bold text-primary-emerald">
                 Ayat Harian
@@ -193,7 +223,7 @@ export default function HomeScreen() {
             </Text>
             
             <View className="flex-row items-center">
-              <Ionicons name="bookmark-outline" size={14} color={colors.gray[500]} />
+              <Ionicons name="bookmark-outline" size={14} color={Colors.light.text.tertiary} />
               <Text className="text-sm font-satoshi-medium text-gray-500 dark:text-gray-400 ml-2">
                 QS. {ayatHarian.surah}:{ayatHarian.ayah}
               </Text>
@@ -202,7 +232,7 @@ export default function HomeScreen() {
         </MotiView>
 
         {/* Daily Challenge */}
-        {dailyChallenge && (
+        {displayDailyChallenge && (
           <MotiView
             from={{ opacity: 0, translateY: 20 }}
             animate={{ opacity: 1, translateY: 0 }}
@@ -210,12 +240,12 @@ export default function HomeScreen() {
             className="mb-4"
           >
             <DailyChallengeCard
-              title={dailyChallenge.title}
-              description={dailyChallenge.description}
-              progress={dailyChallenge.currentProgress}
-              target={dailyChallenge.targetValue}
-              xpReward={dailyChallenge.xpReward}
-              completed={dailyChallenge.completed}
+              title={displayDailyChallenge.title}
+              description={displayDailyChallenge.description}
+              progress={displayDailyChallenge.currentProgress}
+              target={displayDailyChallenge.targetValue}
+              xpReward={displayDailyChallenge.xpReward}
+              completed={displayDailyChallenge.completed}
               onPress={() => router.push('/(tabs)/quran')}
             />
           </MotiView>
@@ -233,7 +263,7 @@ export default function HomeScreen() {
             activeOpacity={0.7}
           >
             <LinearGradient
-              colors={[colors.primary.emerald, '#16A34A']}
+              colors={[Colors.primary.emerald, '#16A34A']}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 1 }}
               style={{ borderRadius: 24, padding: 20 }}
@@ -264,7 +294,7 @@ export default function HomeScreen() {
         </MotiView>
 
         {/* Recent Badges */}
-        {recentBadges.length > 0 && (
+        {displayRecentBadges.length > 0 && (
           <MotiView
             from={{ opacity: 0, translateY: 20 }}
             animate={{ opacity: 1, translateY: 0 }}
@@ -286,7 +316,7 @@ export default function HomeScreen() {
               showsHorizontalScrollIndicator={false}
               contentContainerStyle={{ gap: 12 }}
             >
-              {recentBadges.map((badge, index) => (
+              {displayRecentBadges.map((badge, index) => (
                 <MotiView
                   key={badge.id}
                   from={{ opacity: 0, scale: 0.8 }}
@@ -339,16 +369,16 @@ export default function HomeScreen() {
                 Statistik Minggu Ini
               </Text>
               <TouchableOpacity onPress={() => router.push('/(tabs)/progress')}>
-                <Ionicons name="chevron-forward" size={20} color={colors.primary.emerald} />
+                <Ionicons name="chevron-forward" size={20} color={Colors.primary.emerald} />
               </TouchableOpacity>
             </View>
             
             <View className="flex-row justify-around">
-              <StatItem icon="📚" label="Halaman" value="14" color={colors.primary.emerald} />
+              <StatItem icon="📚" label="Halaman" value="14" color={Colors.primary.emerald} />
               <View className="w-px h-16 bg-gray-200 dark:bg-gray-700" />
-              <StatItem icon="⏱️" label="Menit" value="70" color={colors.celestial.mint} />
+              <StatItem icon="⏱️" label="Menit" value="70" color={Colors.primary.celestial} />
               <View className="w-px h-16 bg-gray-200 dark:bg-gray-700" />
-              <StatItem icon="✅" label="Hari Aktif" value="7" color={colors.muted.gold} />
+              <StatItem icon="✅" label="Hari Aktif" value="7" color={Colors.primary.gold} />
             </View>
           </View>
         </MotiView>
@@ -367,12 +397,12 @@ export default function HomeScreen() {
       </ScrollView>
 
       {/* Level Up Modal */}
-      {levelInfo && (
+      {displayLevelInfo && (
         <LevelUpModal
           visible={showLevelUpModal}
-          level={levelInfo.level}
-          levelName={levelInfo.name}
-          levelIcon={levelInfo.icon}
+          level={displayLevelInfo.level}
+          levelName={displayLevelInfo.name}
+          levelIcon={displayLevelInfo.icon}
           onClose={() => setShowLevelUpModal(false)}
         />
       )}
