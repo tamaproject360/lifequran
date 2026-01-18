@@ -1,0 +1,98 @@
+You are building an Awwwards Mobile App of the Year winner. This is "LifeQuran", a premium Spiritual Productivity Ecosystem for high-performing professionals. Every single detail matters. No shortcuts. No generic solutions.
+
+<company>
+Name: LifeQuran
+Tagline: "Elevating Devotion through Divine Design"
+Focus: A gamified, high-end Al-Qur'an experience for busy professionals.
+Signature: Dedicated to the Global Muslim Ummah 🤲
+Stats:
+- 100% Immersive Reading Environment
+- 5-Minute Daily "Istiqomah" Tracks
+- 60FPS Fluid Motion Architecture
+</company>
+
+<design_philosophy>
+"Divine Nature Architecture." The UI must feel like a digital sanctuary. Borrowing from organic topography, we use fluid wavy shapes and soft-layered cards to mimic the tranquility of a morning in a sacred garden. The interface doesn't just display text; it breathes. We reject rigid grids in favor of "Serene Flow"—where every transition feels like water moving over stone.
+</design_philosophy>
+
+<color_system>
+Forget standard palettes. This is surgical and atmospheric:
+- Primary Emerald: #22C55E (Used for growth indicators and life-affirming actions)
+- Midnight Emerald: #022C22 (The core background for Dark Mode, providing deep ocular comfort)
+- Celestial Mint: #ADFFD8 (Interaction highlights and active states)
+- Muted Gold: #D4AF37 (Reserved strictly for high-value achievements and tajwid honors)
+- Pure Canvas: #FFFFFF (Light mode base with 2% emerald tint for softness)
+
+Rule: The Muted Gold (#D4AF37) appears maximum 5 times on any screen. It is a reward for the eyes, not a decoration.
+</color_system>
+
+<typography>
+No standard fonts. We need "Soulful Precision":
+- Headlines & UI: "Satoshi" (Geometric, sharp, modern executive feel)
+- Quranic Text & Quotes: "Instrument Serif" (Elegant, artistic, scholarly presence)
+- Typography animations: Words should fade in with a slight vertical slide (8px) using a stagger effect of 0.05s per word.
+- Arabic Script: High-quality Uthmani script with adjustable scaling that maintains perfect line-height ratios.
+</typography>
+
+<touch_and_haptics>
+The touch IS the experience:
+- Haptic Feedback: Use "Light Impact" on every verse completion and "Medium Impact" on Surah completion.
+- Adaptive Scaling: Font size slider must use a non-linear scale to maintain golden-ratio legibility.
+- Interaction: All buttons use a subtle scale-down (0.96) on press with a spring-back tension of 400.
+</touch_and_haptics>
+
+<home_dashboard>
+The center of gravity:
+- Top Visual: An organic, animated wavy wave (SVG) in #22C55E that pulses slowly (8s duration).
+- Daily Progress: A "Growth Map" showing a path that turns emerald as the user reads.
+- Quick Entry: A "5-Minute Mode" card that prominently displays the current page/verse target.
+</home_dashboard>
+
+<reading_experience>
+The "Zen Mode":
+- UI: Zero-distraction. Bottom navigation fades to 10% opacity when scrolling down.
+- Colored Tajwid: Implementation of semantic coloring for tajwid rules using the Muted Gold and Celestial Mint variants.
+- Auto-scroll: Smooth linear interpolation (lerp) that follows the audio playback position exactly.
+- Immersive Background: Subtle "Shimmer Effect" on the background when in Dark Mode to prevent eye fatigue.
+</reading_experience>
+
+<gamification_section>
+Spiritual Growth Map:
+- Layout: A vertical timeline with organic nodes.
+- Interaction: Nodes "bloom" with a particle burst animation when a milestone is reached.
+- Stats Counting: Numbers count up from 0 using easeOutExpo when the stats screen is opened.
+</gamification_section>
+
+<technical_architecture>
+Stack:
+- React Native + Expo
+- Styling: NativeWind (Tailwind CSS)
+- Animation: React Native Reanimated + Moti
+- Database: SQLite (via expo-sqlite) for high-speed offline access to 114 Surahs, bookmarks, and history.
+- Audio: Expo-AV with Background Notification Control.
+
+Performance requirements:
+- First Contentful Paint: <1.2s
+- Animation Frame Rate: Solid 60fps (GPU-accelerated transforms/opacity only).
+- Loading State: Custom Skeleton Screens with emerald-tinted flow animations.
+- Offline-First: All Quranic text and tajwid data must be pre-indexed in SQLite.
+</technical_architecture>
+
+<motion_principles>
+The laws of the LifeQuran universe:
+1. Fluidity: No "Instant" changes. Everything is a transition.
+2. Serenity: Use Ease-out-expo for all menu entries (fast start, graceful finish).
+3. Stagger: List items (Surahs) must cascade into view with a 30ms delay per item.
+Forbidden: Bounce easing (too childish), Linear easing (too robotic), Delays over 0.4s.
+</motion_principles>
+
+<quality_checklist>
+□ Do the wavy shapes feel organic and non-repetitive?
+□ Does the Dark Mode (#022C22) feel premium and non-pitch-black?
+□ Is the Satoshi + Instrument Serif pairing maintaining a high-end editorial look?
+□ Are all audio-sync transitions using 60fps Reanimated hooks?
+□ Does the SQLite query for the 30 Juz result in <100ms render time?
+□ Is the Muted Gold used sparingly for "holy" or "achievement" moments only?
+</quality_checklist>
+
+Build this. Make it feel like a divine digital companion for the modern soul.
