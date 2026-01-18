@@ -213,3 +213,7 @@ export const useBookmarkStore = create<BookmarkState>((set, get) => ({
 
 // Export gamification store
 export { useGamificationStore } from './gamificationStore';
+
+// Export audio store
+export { useAudioStore, AVAILABLE_QARIS } from './audioStore';
+export type { Qari, AudioState } from './audioStore';

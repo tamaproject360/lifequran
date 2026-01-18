@@ -99,6 +99,53 @@ export const initDatabase = async () => {
     );
   `);
 
+  // Create asbabun_nuzul table
+  await db.execAsync(`
+    CREATE TABLE IF NOT EXISTS asbabun_nuzul (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      surah_id INTEGER NOT NULL,
+      ayah_number INTEGER,
+      story TEXT NOT NULL,
+      source TEXT,
+      FOREIGN KEY (surah_id) REFERENCES surahs (id)
+    );
+  `);
+
+  // Create surah_virtues table (keutamaan surah)
+  await db.execAsync(`
+    CREATE TABLE IF NOT EXISTS surah_virtues (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      surah_id INTEGER NOT NULL UNIQUE,
+      virtue_text TEXT NOT NULL,
+      hadith_reference TEXT,
+      FOREIGN KEY (surah_id) REFERENCES surahs (id)
+    );
+  `);
+
+  // Create daily_duas table (doa sehari-hari)
+  await db.execAsync(`
+    CREATE TABLE IF NOT EXISTS daily_duas (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      title TEXT NOT NULL,
+      arabic_text TEXT NOT NULL,
+      transliteration TEXT,
+      translation TEXT NOT NULL,
+      category TEXT NOT NULL,
+      reference TEXT
+    );
+  `);
+
+  // Create motivational_quotes table
+  await db.execAsync(`
+    CREATE TABLE IF NOT EXISTS motivational_quotes (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      text TEXT NOT NULL,
+      author TEXT,
+      category TEXT,
+      is_quranic INTEGER DEFAULT 0
+    );
+  `);
+
   // Create bookmarks table
   await db.execAsync(`
     CREATE TABLE IF NOT EXISTS bookmarks (
@@ -626,6 +673,183 @@ export const DatabaseOperations = {
     }
 
     return false;
+  },
+
+  // Tafsir Operations
+  getTafsirByAyah: async (surahId: number, ayahNumber: number) => {
+    const db = await getDatabase();
+    return await db.getFirstAsync<any>(
+      'SELECT * FROM tafsir WHERE surah_id = ? AND ayah_number = ?',
+      [surahId, ayahNumber]
+    );
+  },
+
+  addTafsir: async (surahId: number, ayahNumber: number, textShort: string, textLong?: string) => {
+    const db = await getDatabase();
+    await db.runAsync(
+      'INSERT INTO tafsir (surah_id, ayah_number, text_short, text_long) VALUES (?, ?, ?, ?)',
+      [surahId, ayahNumber, textShort, textLong || null]
+    );
+  },
+
+  // Asbabun Nuzul Operations
+  getAsbabunNuzulBySurah: async (surahId: number) => {
+    const db = await getDatabase();
+    return await db.getAllAsync<any>(
+      'SELECT * FROM asbabun_nuzul WHERE surah_id = ? ORDER BY ayah_number',
+      [surahId]
+    );
+  },
+
+  addAsbabunNuzul: async (surahId: number, story: string, ayahNumber?: number, source?: string) => {
+    const db = await getDatabase();
+    await db.runAsync(
+      'INSERT INTO asbabun_nuzul (surah_id, ayah_number, story, source) VALUES (?, ?, ?, ?)',
+      [surahId, ayahNumber || null, story, source || null]
+    );
+  },
+
+  // Surah Virtues Operations
+  getSurahVirtue: async (surahId: number) => {
+    const db = await getDatabase();
+    return await db.getFirstAsync<any>(
+      'SELECT * FROM surah_virtues WHERE surah_id = ?',
+      [surahId]
+    );
+  },
+
+  addSurahVirtue: async (surahId: number, virtueText: string, hadithReference?: string) => {
+    const db = await getDatabase();
+    await db.runAsync(
+      'INSERT OR REPLACE INTO surah_virtues (surah_id, virtue_text, hadith_reference) VALUES (?, ?, ?)',
+      [surahId, virtueText, hadithReference || null]
+    );
+  },
+
+  // Daily Duas Operations
+  getAllDuas: async () => {
+    const db = await getDatabase();
+    return await db.getAllAsync<any>('SELECT * FROM daily_duas ORDER BY category, title');
+  },
+
+  getDuasByCategory: async (category: string) => {
+    const db = await getDatabase();
+    return await db.getAllAsync<any>(
+      'SELECT * FROM daily_duas WHERE category = ? ORDER BY title',
+      [category]
+    );
+  },
+
+  addDua: async (title: string, arabicText: string, translation: string, category: string, transliteration?: string, reference?: string) => {
+    const db = await getDatabase();
+    await db.runAsync(
+      'INSERT INTO daily_duas (title, arabic_text, transliteration, translation, category, reference) VALUES (?, ?, ?, ?, ?, ?)',
+      [title, arabicText, transliteration || null, translation, category, reference || null]
+    );
+  },
+
+  // Motivational Quotes Operations
+  getRandomQuote: async () => {
+    const db = await getDatabase();
+    return await db.getFirstAsync<any>(
+      'SELECT * FROM motivational_quotes ORDER BY RANDOM() LIMIT 1'
+    );
+  },
+
+  getAllQuotes: async () => {
+    const db = await getDatabase();
+    return await db.getAllAsync<any>('SELECT * FROM motivational_quotes');
+  },
+
+  addQuote: async (text: string, author?: string, category?: string, isQuranic: boolean = false) => {
+    const db = await getDatabase();
+    await db.runAsync(
+      'INSERT INTO motivational_quotes (text, author, category, is_quranic) VALUES (?, ?, ?, ?)',
+      [text, author || null, category || null, isQuranic ? 1 : 0]
+    );
+  },
+
+  // Initialize content data
+  initializeContentData: async () => {
+    const db = await getDatabase();
+    
+    // Check if data already exists
+    const duasCount = await db.getFirstAsync<any>('SELECT COUNT(*) as count FROM daily_duas');
+    const quotesCount = await db.getFirstAsync<any>('SELECT COUNT(*) as count FROM motivational_quotes');
+    
+    if (duasCount.count === 0) {
+      // Add sample duas
+      const duas = [
+        {
+          title: 'Doa Sebelum Tidur',
+          arabic: 'بِاسْمِكَ اللَّهُمَّ أَمُوتُ وَأَحْيَا',
+          transliteration: 'Bismika Allahumma amuutu wa ahyaa',
+          translation: 'Dengan nama-Mu ya Allah, aku mati dan aku hidup',
+          category: 'Tidur',
+          reference: 'HR. Bukhari'
+        },
+        {
+          title: 'Doa Bangun Tidur',
+          arabic: 'الْحَمْدُ لِلَّهِ الَّذِي أَحْيَانَا بَعْدَ مَا أَمَاتَنَا وَإِلَيْهِ النُّشُورُ',
+          transliteration: 'Alhamdulillahil-ladzi ahyana ba\'da ma amatana wa ilaihin-nusyur',
+          translation: 'Segala puji bagi Allah yang telah menghidupkan kami setelah mematikan kami dan kepada-Nya kami akan kembali',
+          category: 'Bangun Tidur',
+          reference: 'HR. Bukhari'
+        },
+        {
+          title: 'Doa Sebelum Makan',
+          arabic: 'بِسْمِ اللَّهِ',
+          transliteration: 'Bismillah',
+          translation: 'Dengan nama Allah',
+          category: 'Makan',
+          reference: 'HR. Abu Dawud'
+        },
+        {
+          title: 'Doa Sesudah Makan',
+          arabic: 'الْحَمْدُ لِلَّهِ الَّذِي أَطْعَمَنَا وَسَقَانَا وَجَعَلَنَا مُسْلِمِينَ',
+          transliteration: 'Alhamdulillahil-ladzi ath\'amana wa saqana wa ja\'alana muslimin',
+          translation: 'Segala puji bagi Allah yang telah memberi kami makan dan minum serta menjadikan kami muslim',
+          category: 'Makan',
+          reference: 'HR. Abu Dawud'
+        },
+        {
+          title: 'Doa Keluar Rumah',
+          arabic: 'بِسْمِ اللَّهِ تَوَكَّلْتُ عَلَى اللَّهِ لاَ حَوْلَ وَلاَ قُوَّةَ إِلاَّ بِاللَّهِ',
+          transliteration: 'Bismillah, tawakkaltu \'alallah, la hawla wa la quwwata illa billah',
+          translation: 'Dengan nama Allah, aku bertawakal kepada Allah, tiada daya dan kekuatan kecuali dengan pertolongan Allah',
+          category: 'Perjalanan',
+          reference: 'HR. Abu Dawud'
+        },
+      ];
+
+      for (const dua of duas) {
+        await DatabaseOperations.addDua(
+          dua.title,
+          dua.arabic,
+          dua.translation,
+          dua.category,
+          dua.transliteration,
+          dua.reference
+        );
+      }
+    }
+
+    if (quotesCount.count === 0) {
+      // Add sample quotes
+      const quotes = [
+        { text: 'Sesungguhnya bersama kesulitan ada kemudahan', author: 'QS. Al-Insyirah: 6', category: 'Motivasi', isQuranic: true },
+        { text: 'Dan Dia bersama kamu di mana saja kamu berada', author: 'QS. Al-Hadid: 4', category: 'Keimanan', isQuranic: true },
+        { text: 'Maka nikmat Tuhan kamu yang manakah yang kamu dustakan?', author: 'QS. Ar-Rahman: 13', category: 'Syukur', isQuranic: true },
+        { text: 'Karena itu, ingatlah kamu kepada-Ku niscaya Aku ingat (pula) kepadamu', author: 'QS. Al-Baqarah: 152', category: 'Dzikir', isQuranic: true },
+        { text: 'Barangsiapa bertakwa kepada Allah niscaya Dia akan mengadakan baginya jalan keluar', author: 'QS. At-Talaq: 2', category: 'Takwa', isQuranic: true },
+      ];
+
+      for (const quote of quotes) {
+        await DatabaseOperations.addQuote(quote.text, quote.author, quote.category, quote.isQuranic);
+      }
+    }
+
+    console.log('✅ Content data initialized');
   },
 };
 
