@@ -45,22 +45,22 @@
 
 | No | Tugas | Status | Prioritas | Phase |
 |----|-------|--------|-----------|-------|
-| 9 | Implement color system (#22C55E, #022C22, #ADFFD8, #D4AF37, #FFFFFF) | ⬜ Pending | Critical | 1 |
-| 10 | Setup custom fonts: Satoshi & Instrument Serif | ⬜ Pending | Critical | 1 |
-| 11 | Create reusable Button component dengan haptic feedback | ⬜ Pending | Critical | 1 |
-| 12 | Create Card component dengan rounded corners & soft shadows | ⬜ Pending | Critical | 1 |
+| 9 | Implement color system (#22C55E, #022C22, #ADFFD8, #D4AF37, #FFFFFF) | ✅ Completed | Critical | 1 |
+| 10 | Setup custom fonts: Satoshi & Instrument Serif | ✅ Completed | Critical | 1 |
+| 11 | Create reusable Button component dengan haptic feedback | ✅ Completed | Critical | 1 |
+| 12 | Create Card component dengan rounded corners & soft shadows | ✅ Completed | Critical | 1 |
 | 13 | Implement organic wavy shapes (SVG) untuk decorations | ⬜ Pending | High | 1 |
-| 14 | Create custom Loading/Skeleton screens dengan emerald flow | ⬜ Pending | High | 1 |
-| 15 | Implement Dark Mode toggle & theme context | ⬜ Pending | Critical | 1 |
-| 16 | Create typography animation system (fade + slide) | ⬜ Pending | High | 1 |
+| 14 | Create custom Loading/Skeleton screens dengan emerald flow | ✅ Completed | High | 1 |
+| 15 | Implement Dark Mode toggle & theme context | ✅ Completed | Critical | 1 |
+| 16 | Create typography animation system (fade + slide) | ✅ Completed | High | 1 |
 
 ### Onboarding Flow
 
 | No | Tugas | Status | Prioritas | Phase |
 |----|-------|--------|-----------|-------|
-| 17 | Design & implement Splash Screen dengan logo LifeQuran | ⬜ Pending | Critical | 1 |
-| 18 | Create Welcome Screen dengan pengenalan aplikasi | ⬜ Pending | Critical | 1 |
-| 19 | Build Registration/Login screen (dengan skip option) | ⬜ Pending | High | 1 |
+| 17 | Design & implement Splash Screen dengan logo LifeQuran | ✅ Completed | Critical | 1 |
+| 18 | Create Welcome Screen dengan pengenalan aplikasi | ✅ Completed | Critical | 1 |
+| 19 | Build Registration/Login screen (dengan skip option) | ✅ Completed | High | 1 |
 | 20 | Create "Set Daily Target" onboarding screen | ⬜ Pending | High | 1 |
 | 21 | Create "Set Reminder Time" onboarding screen | ⬜ Pending | High | 1 |
 | 22 | Build interactive tutorial/walkthrough | ⬜ Pending | High | 1 |
